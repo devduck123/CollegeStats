@@ -1,59 +1,86 @@
 import java.util.*;
-public class Mean // this program takes a list of numbers and calculates the mean and standard deviation
-{
-    public static void main (String[] args) {
-        Scanner reader = new Scanner(System.in);
-        boolean check = false;
-        List<Double> numbers = new ArrayList<Double>();
 
-        // prompt for list of numbers
-        System.out.println("Enter the list of numbers and enter 510 when finished");
-        while (check == false)
+// 1. Compute Mean x-bar (Add all elements, divide by # of elements)
+// 2. Compute Range [MAX - MIN]
+
+public class Mean{
+   public static void main(String[] args){
+        Scanner reader = new Scanner(System.in);
+        List<Double> sample = new ArrayList<Double>();
+        boolean flag = false;
+        
+        // grab data for the Sample
+        System.out.println("Enter numbers for Sample, input 510 when done");
+        while (flag == false)
         {
             double response = reader.nextDouble();
             if (response != 510)
             {
-                numbers.add(response);
+                sample.add(response);
             }
             else
             {
-                check = true;
+                flag = true;
             }
         }
-        System.out.println(numbers);
+        System.out.println("Sample: " + sample);
+        System.out.println("Mean: " + mean(sample));
+        System.out.println("Range: " + range(sample));
+        System.out.println("Deviation: " + deviation(sample));
+    }
+    
 
-
-
-
-        // add up numbers in the list
-        double total = 0;
+    public static double mean(List<Double> numbers)
+    {
+        double total = numbers.size();
+        double sum = 0;
         for (int i = 0; i < numbers.size(); i++)
         {
-            total += numbers.get(i);
+            sum += numbers.get(i);
         }
-        // print addition total, and amount of numbers
-        System.out.println("total: " + total);
-        System.out.println("amount of numbers: " + numbers.size());
+        double m = sum / total;
+        return m;
+    }
+    
 
-        // divide the total by amount of numbers to obtain median
-        System.out.println("that makes the median x: " + total / (double)numbers.size());
+    public static double range(List<Double> numbers)
+    {
+        double max = numbers.get(0);
+        double min = numbers.get(0);
 
-        // find (sample) standard deviation 's' --> size-1
-        // 1. subtract mean from original value
-        // 2. square that value
-        // 3. add all of these values up w/ a counter
-        // 4. divide by the size again
-        // 5. square root of it
+        for (double i : numbers)
+        {
+            if (i > max)
+            {
+                max = i;
+            }
+            else if (i < min)
+            {
+                min = i;
+            }
+        }
+        return max - min;
+    }
+
+    public static double deviation(List<Double> numbers)
+    {
         double counter = 0;
+        double sum = 0;
         for (int i = 0; i < numbers.size(); i++)
         {
-            // assign temp variable to value of original value - mean
-            double temp = numbers.get(i) - total / (double)numbers.size();
-            // add to variable counter that value, but squared
+            sum += numbers.get(i);
+        }
+
+        for (int i = 0; i < numbers.size(); i++)
+        {
+            double temp = numbers.get(i) - sum / (double)numbers.size();
             counter += temp * temp;
         }
         double counterDiv = counter / ((double)numbers.size()-1);
         double s = Math.sqrt(counterDiv);
-        System.out.println("that makes the SAMPLE standard deviation s: " + s);
+        return s;
     }
 }
+// k = samples -> x-bar-bar = Add all means, Divide by # samples
+// n = sample size -> r-bar = Add all ranges, Divide by # samples
+// made for Operations Management [TOM 3010]
